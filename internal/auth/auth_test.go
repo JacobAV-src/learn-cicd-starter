@@ -1,32 +1,32 @@
 package auth
 
 import (
-    "net/http"
-    "testing"
+	"net/http"
+	"testing"
 )
 
 func TestGetAPIKey(t *testing.T) {
-    tests := []struct {
-            name    string
-            headers http.Header
-            expectedKey string
-            expectedError string
-    }{
-        {
-            name: "Valid ApiKey header",
-            headers: http.Header{
+	tests := []struct {
+		name          string
+		headers       http.Header
+		expectedKey   string
+		expectedError string
+	}{
+		{
+			name: "Valid ApiKey header",
+			headers: http.Header{
 				"Authorization": []string{"ApiKey some-secret-key"},
 			},
-            expectedKey:   "some-secret-key",
+			expectedKey:   "some-secret-key",
 			expectedError: "",
 		},
-        {
+		{
 			name:          "No Authorization header",
 			headers:       http.Header{},
 			expectedKey:   "",
 			expectedError: "no authorization header included",
 		},
-        {
+		{
 			name: "Malformed header (missing key)",
 			headers: http.Header{
 				"Authorization": []string{"ApiKey"},
@@ -34,7 +34,7 @@ func TestGetAPIKey(t *testing.T) {
 			expectedKey:   "",
 			expectedError: "malformed authorization header",
 		},
-        {
+		{
 			name: "Wrong prefix (Bearer instead of ApiKey)",
 			headers: http.Header{
 				"Authorization": []string{"Bearer some-token"},
@@ -43,7 +43,7 @@ func TestGetAPIKey(t *testing.T) {
 			expectedError: "malformed authorization header",
 		},
 	}
-for _, tt := range tests {
+	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			key, err := GetAPIKey(tt.headers)
 
