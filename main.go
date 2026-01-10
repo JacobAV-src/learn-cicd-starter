@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+    "time"
 	"embed"
 	"io"
 	"log"
@@ -91,8 +92,10 @@ func main() {
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: router,
+        ReadHeaderTimeout: 2 * time.Second,
 	}
 
 	log.Printf("Serving on port: %s\n", port)
 	log.Fatal(srv.ListenAndServe())
 }
+
